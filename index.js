@@ -1,5 +1,6 @@
 'use strict';
-//console.log('heyyy');
+/*eslint-env jquery*/
+
 const STORE = [
   {name:'Orange',checkValue:true},
   {name:'Apple', checkValue:false},
@@ -9,22 +10,20 @@ const STORE = [
 function generateItemElement(item, itemIndex, template) {
   return `
     <li class="js-item-index-element" data-item-index="${itemIndex}">
-        <span class="shopping-item js-shopping-item ${item.checked ? 
+    <span class="shopping-item js-shopping-item ${item.checked ? 
     'shopping-item__checked' : ''}">${item.name}</span>
-        <div class="shopping-item-controls"> 
-        <button class="shopping-item-toggle js-item-toggle"> 
-        <span class="button-label">check</span> </button> 
-        <button class="shopping-item-delete js-item-delete"> 
-        <span class="button-label">delete</span> </button>
-        </div> </li>`;
+    <div class="shopping-item-controls">
+      <button class="shopping-item-toggle js-item-toggle">
+          <span class="button-label">check</span>
+      </button>
+      <button class="shopping-item-delete js-item-delete">
+          <span class="button-label">delete</span>
+      </button>
+    </div>
+    </li>`;
 }
 
 function generateShoppingItemsString(shoppingList) {
-//   //return `
-//     <li>apples</li>
-//     <li>oranges</li>
-//     <li>milk</li>
-//     <li>bread</li>`;
   const items = shoppingList.map((item,index) => generateItemElement(item,index));
   return items.join('');
 }
@@ -34,13 +33,26 @@ function renderShoppingList() {
   // the DOM
   const shoppingListItemString = generateShoppingItemsString(STORE);
   $('.js-shopping-list').html(shoppingListItemString);
-
+  // eslint-disable-next-line no-console
   console.log('`renderShoppingList` ran');
 }
   
-  
+function addItemToShoppingList(itemName) { 
+  STORE.push({name : itemName, checkValue : false}); 
+} 
+
 function handleNewItemSubmit() {
+  $('#js-shopping-list-form').submit(function(event){
+    event.preventDefault(); 
+    const newItemName = $('.js-shopping-list-entry').val(); 
+    $('.js-shopping-list-entry').val(''); 
+    addItemToShoppingList(newItemName);
+    renderShoppingList();    
+  }); 
+
+  
   // this function will be responsible for when users add a new shopping list item
+  // eslint-disable-next-line no-console
   console.log('`handleNewItemSubmit` ran');
 }
   
@@ -48,6 +60,7 @@ function handleNewItemSubmit() {
 function handleItemCheckClicked() {
   // this function will be responsible for when users click the "check" button on
   // a shopping list item.
+  //eslint-disable-next-line no-console
   console.log('`handleItemCheckClicked` ran');
 }
   
@@ -55,6 +68,7 @@ function handleItemCheckClicked() {
 function handleDeleteItemClicked() {
   // this function will be responsible for when users want to delete a shopping list
   // item
+  // eslint-disable-next-line no-console
   console.log('`handleDeleteItemClicked` ran');
 }
   
