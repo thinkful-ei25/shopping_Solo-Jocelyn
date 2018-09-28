@@ -2,9 +2,9 @@
 /*eslint-env jquery*/
 
 const STORE = [
-  {name:'Orange',checkValue:true},
-  {name:'Apple', checkValue:false},
-  {name:'Kiwi',checkValue:true}
+  {name:'Orange',checked:true},
+  {name:'Apple', checked:false},
+  {name:'Kiwi',checked:true}
 ];
 
 function generateItemElement(item, itemIndex, template) {
@@ -38,7 +38,7 @@ function renderShoppingList() {
 }
   
 function addItemToShoppingList(itemName) { 
-  STORE.push({name : itemName, checkValue : false}); 
+  STORE.push({name : itemName, checked : false}); 
 } 
 
 function handleNewItemSubmit() {
@@ -56,19 +56,49 @@ function handleNewItemSubmit() {
   console.log('`handleNewItemSubmit` ran');
 }
   
-  
+function getItemIndexFromElement(item) {
+  const itemIndexString = $(item)
+    .closest('.js-item-index-element')
+    .attr('data-item-index');
+  return parseInt(itemIndexString, 10);
+}
+
+function toggleCheckedForListItem(itemIndex) {
+  STORE[itemIndex].checked = !STORE[itemIndex].checked; 
+}
+
 function handleItemCheckClicked() {
   // this function will be responsible for when users click the "check" button on
   // a shopping list item.
   //eslint-disable-next-line no-console
+  $('.js-shopping-list').on('click', '.js-item-toggle', function(event){
+    const itemIndex = getItemIndexFromElement(event.currentTarget);
+    toggleCheckedForListItem(itemIndex);
+    renderShoppingList();
+  });
   console.log('`handleItemCheckClicked` ran');
 }
-  
+
+function renderDelete(item) {
+  $(item).remove();
+}
+
+function deleteStoreItem(item){
+  const index = getItemIndexFromElement(item);
+  STORE.splice(index,1);
+}
   
 function handleDeleteItemClicked() {
   // this function will be responsible for when users want to delete a shopping list
   // item
   // eslint-disable-next-line no-console
+  $('.js-shopping-list').on('click', '.js-item-delete', function(event){
+    //$(event.currentTarget).closest('li').remove();
+    const listElement = $(event.currentTarget).closest('li');
+    renderDelete(listElement);
+    deleteStoreItem(listElement);
+  });
+
   console.log('`handleDeleteItemClicked` ran');
 }
   
